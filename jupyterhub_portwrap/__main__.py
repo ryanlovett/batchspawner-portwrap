@@ -31,7 +31,11 @@ def main():
 
     sys.argv = ["portwrap", "-p", port, "-P", str(args.guest_port)] + cmd
 
-    run_path(which("portwrap"), run_name="__main__")
+    portwrap_exec = which("portwrap")
+    if not portwrap_exec:
+        raise Exception("Could not find 'portwrap' in PATH.")
+
+    run_path(portwrap_exec, run_name="__main__")
 
 
 if __name__ == "__main__":

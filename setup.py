@@ -1,18 +1,18 @@
 import setuptools
 
 setuptools.setup(
-    name="jupyterhub-portwrap",
+    name="batchspawner-portwrap",
     version="0.0.1",
-    url="https://github.com/ryanlovett/jupyterhub-portwrap",
+    url="https://github.com/ryanlovett/batchspawner-portwrap",
     author="Ryan Lovett",
     author_email="rylo@berkeley.edu",
-    description="Launch portwrapped command from jupyterhub spawner",
+    description="Launch portwrapped command from jupyterhub's batchspawner",
     packages=setuptools.find_packages(),
-    keywords=["portwrap", "batchspawner"],
+    keywords=["portwrap", "batchspawner", "jupyterhub"],
     install_requires=["portwrap"],
     entry_points={
         "console_scripts": [
-            "jupyterhub-portwrap = jupyterhub_portwrap.__main__:main",
+            "batchspawner-portwrap = batchspawner_portwrap.__main__:main",
         ]
     },
 )

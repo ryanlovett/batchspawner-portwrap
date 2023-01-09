@@ -1,5 +1,5 @@
-jupyterhub-portwrap
-===================
+batchspawner-portwrap
+=====================
 
 This script is intended be called from batchspawner-singleuser, and executes
 jupyterhub-singleuser inside a sandbox. The use case would be if you:
@@ -16,7 +16,7 @@ requires authentication via jupyter server, the proxied app would still be
 listening on an open TCP port on localhost. Any other user on the system can
 connect to it from any TCP or HTTP client.
 
-`jupyterhub-portwrap` uses [portwrap](https://github.com/ryanlovett/portwrap)
+`batchspawner-portwrap` uses [portwrap](https://github.com/ryanlovett/portwrap)
 to prepare a sandbox with user and network namespaces and runs
 `jupyterhub-singleuser` inside it. The jupyter server continues to accept
 authenticated connections to its port, but proxied services are only reachable
@@ -33,24 +33,24 @@ inside it.
 
 Installation
 ------------
-```
-pip install git+https://github.com/ryanlovett/jupyterhub-portwrap
+```shell
+pip install git+https://github.com/ryanlovett/batchspawner-portwrap
 ```
 
 
 Configuration
 -------------
-In your jupyterhub configuration, insert `jupyterhub-portwrap` in front of your `c.Spawner.cmd`. For example, if you have set something like:
+In your jupyterhub configuration, insert `batchspawner-portwrap` in front of your `c.Spawner.cmd`. For example, if you have set something like:
 
-```
+```python
 c.Spawner.cmd = [
     'jupyterhub-singleuser', '--arg1', '--arg2', ...
 ]
 ```
 
 Replace it with:
-```
+```python
 c.Spawner.cmd = [
-    'jupyterhub-portwrap', 'jupyterhub-singleuser', '--arg1', '--arg2', ...
+    'batchspawner-portwrap', 'jupyterhub-singleuser', '--arg1', '--arg2', ...
 ]
 ```

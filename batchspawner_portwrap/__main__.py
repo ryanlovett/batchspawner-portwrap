@@ -8,7 +8,7 @@ from shutil import which
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Launch portwrapped command from jupyterhub spawner."
+        description="Sandbox batchspawned jupyter servers with portwrap."
     )
     parser.add_argument(
         "-P",

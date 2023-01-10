@@ -40,7 +40,7 @@ def main():
         raise Exception(f"No such file: {args.portwrap}")
 
     sys.argv = (
-        ["portwrap", "-p", args.port, "-P", str(args.guest_port)]
+        ["portwrap", "-p", str(args.port), "-P", str(args.guest_port)]
         + remainder
         + ["--port={guest-port}"]
     )

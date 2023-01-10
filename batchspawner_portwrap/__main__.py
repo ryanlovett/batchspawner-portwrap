@@ -1,4 +1,5 @@
 import argparse
+import os
 import sys
 
 from runpy import run_path
@@ -17,23 +18,39 @@ def main():
         type=int,
         help="Namespace-accessible port",
     )
+    parser.add_argument(
+        "--portwrap-path",
+        dest="portwrap",
+        help="Path to portwrap. Default is to search PATH.",
+    )
+    # This argument is provided by batchspawner-singleuser.
+    # We capture it and provide it to portwrap.
+    parser.add_argument(
+        "--port",
+        dest="port",
+        type=int,
+        required=True,
+        help="The port the notebook server will listen on",
+    )
+
+    # remainder is usually jupyterhub-singleuser and its arguments
     args, remainder = parser.parse_known_args()
 
-    cmd = []
-    port = None
-    for arg in remainder:
-        if arg.startswith("--port="):
-            port = arg.split("=")[1]
-            arg = "--port={guest-port}"
-        cmd.append(arg)
-    if not port:
-        raise Exception("No port specified in command.")
+    if args.portwrap and not os.path.exists(args.portwrap):
+        raise Exception(f"No such file: {args.portwrap}")
 
-    sys.argv = ["portwrap", "-p", port, "-P", str(args.guest_port)] + cmd
+    sys.argv = (
+        ["portwrap", "-p", args.port, "-P", str(args.guest_port)]
+        + remainder
+        + ["--port={guest-port}"]
+    )
 
-    portwrap_exec = which("portwrap")
-    if not portwrap_exec:
-        raise Exception("Could not find 'portwrap' in PATH.")
+    if args.portwrap:
+        portwrap_exec = args.portwrap
+    else:
+        portwrap_exec = which("portwrap")
+        if not portwrap_exec:
+            raise Exception("Could not find 'portwrap' in PATH.")
 
     run_path(portwrap_exec, run_name="__main__")
 

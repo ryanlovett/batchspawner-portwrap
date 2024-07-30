@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="batchspawner-portwrap",
-    version="0.0.1",
+    version="0.1.0",
     url="https://github.com/ryanlovett/batchspawner-portwrap",
     author="Ryan Lovett",
     author_email="rylo@berkeley.edu",

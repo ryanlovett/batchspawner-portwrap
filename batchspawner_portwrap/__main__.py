@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+from urllib.parse import urlparse
 
 from runpy import run_path
 from shutil import which
@@ -29,7 +30,6 @@ def main():
         "--port",
         dest="port",
         type=int,
-        required=True,
         help="The port the notebook server will listen on",
     )
 
@@ -39,8 +39,20 @@ def main():
     if args.portwrap and not os.path.exists(args.portwrap):
         raise Exception(f"No such file: {args.portwrap}")
 
+    # batchspawner < 1.3 with recent jupyterhub does not pass --port.
+    # We'll determine it from the JUPYTERHUB_SERVICE_URL.
+    if not args.port:
+        jupyterhub_service_url = os.getenv("JUPYTERHUB_SERVICE_URL")
+        if not jupyterhub_service_url:
+            raise Exception(
+                "Argument --port not passed, and JUPYTERHUB_SERVICE_URL not defined."
+            )
+        port = urlparse(jupyterhub_service_url).port
+    else:
+        port = args.port
+
     sys.argv = (
-        ["portwrap", "-p", str(args.port), "-P", str(args.guest_port)]
+        ["portwrap", "-p", str(port), "-P", str(args.guest_port)]
         + remainder
         + ["--port={guest-port}"]
     )
